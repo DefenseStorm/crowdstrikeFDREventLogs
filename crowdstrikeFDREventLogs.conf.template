@@ -1,0 +1,13 @@
+# conf file must be in same directory as script
+
+[json]
+app_name = Crowdstrike FDR
+version = 1.0
+
+[crowdstrike]
+pid_file = ./crowdstrikeFDREventLogs.pid
+s3_key = 
+s3_secret = 
+sqs_url =
+s3_identifier =
+history = 24

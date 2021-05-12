@@ -79,7 +79,7 @@ class integration(object):
 
         notification_time = response
         if 'Messages' not in response.keys():
-            self.ds.log('INFO', "No SQS Notifications to handle")
+            self.ds.log('INFO', "No more SQS Notifications to handle")
             return None, None, None
 
         msg_count = len(response['Messages'])
@@ -96,11 +96,21 @@ class integration(object):
     def handle_local_files(self, local_files):
         for thisfile in local_files:
             self.ds.log('INFO', "Processing file %s" %(thisfile))
+            f_name = 'datadir/' + thisfile
+            if 'managedassets' in thisfile:
+                category = 'managedassets'
+            elif 'aid_master' in thisfile:
+                category = 'aid_master'
+            elif 'notmanaged' in thisfile:
+                category = 'notmanaged'
+            else:
+                category = 'data'
             try:
-                f_name = 'datadir/' + thisfile
                 with gzip.open(f_name) as f:
                     for line in f:
-                        self.ds.writeJSONEvent(json.loads(str(line, 'utf-8')), JSON_field_mappings = self.JSON_field_mappings)
+                        event = json.loads(str(line, 'utf-8'))
+                        event['category'] = category
+                        self.ds.writeJSONEvent(event, JSON_field_mappings = self.JSON_field_mappings)
             except Exception as e:
                 self.ds.log('ERROR', "Error handling file %s: %s" %(f_name, e))
                 return False

@@ -78,6 +78,10 @@ class integration(object):
             return None, None, None
 
         notification_time = response
+        if 'Messages' not in response.keys():
+            self.ds.log('INFO', "No SQS Notifications to handle")
+            return None, None, None
+
         msg_count = len(response['Messages'])
         if msg_count < 1:
             self.ds.log('INFO', "No SQS Notifications to handle")
@@ -129,9 +133,9 @@ class integration(object):
             return
 
         sqs_rh, msg_id, sqs_msg = self.get_SQS_message()
-        self.ds.log('INFO', "Processing Notification: %s" %(msg_id))
 
         while sqs_rh != None:
+            self.ds.log('INFO', "Processing Notification: %s" %(msg_id))
             notification_time = int(sqs_msg['timestamp']) / 1000
             current_epoch = time.time()
             self.ds.log('INFO', "Notification: %s, Timestamp %s" %(msg_id, datetime.datetime.utcfromtimestamp(int(sqs_msg['timestamp']/1000)).isoformat() + 'Z'))

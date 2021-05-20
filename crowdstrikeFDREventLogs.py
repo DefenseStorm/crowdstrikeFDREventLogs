@@ -28,7 +28,15 @@ class integration(object):
 
 
     JSON_field_mappings = {
-        'applicationName' : 'application'
+        'aid' : 'device_id',
+        'aip' : 'external_ip',
+        'ComputerName' : 'client_hostname',
+        'ContextProcessId' : 'process_id',
+        'ContextThreadId' : 'thread_id',
+        'event_platform' : 'os_type',
+        'event_simpleName' : 'category',
+        'FileName' : 'file_name',
+        'FilePath' : 'file_path',
     }
 
     def get_S3_files(self, sqs_msg):
@@ -104,12 +112,17 @@ class integration(object):
             elif 'notmanaged' in thisfile:
                 category = 'notmanaged'
             else:
-                category = 'data'
+                category = None
             try:
                 with gzip.open(f_name) as f:
                     for line in f:
                         event = json.loads(str(line, 'utf-8'))
-                        event['category'] = category
+                        if category != None:
+                            event['category'] = category
+                        if 'ContextTimeStamp' in event.keys():
+                            event['receive_time'] = event['timestamp']
+                            event['timestamp'] = event['ContextTimeStamp']
+                            del event['ContextTimeStamp']
                         self.ds.writeJSONEvent(event, JSON_field_mappings = self.JSON_field_mappings)
             except Exception as e:
                 self.ds.log('ERROR', "Error handling file %s: %s" %(f_name, e))

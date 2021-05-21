@@ -6,10 +6,7 @@ import os
 import fcntl
 import json
 import requests
-import time
-import re
-import boto3
-import gzip
+import time import re import boto3 import gzip
 import datetime
 
 from six import PY2
@@ -30,10 +27,10 @@ class integration(object):
     JSON_field_mappings = {
         'aid' : 'device_id',
         'aip' : 'external_ip',
-        'ComputerName' : 'client_hostname',
         'ContextProcessId' : 'process_id',
         'ContextThreadId' : 'thread_id',
         'event_platform' : 'os_type',
+        'ComputerName' : 'client_hostname',
         'event_simpleName' : 'category',
         'FileName' : 'file_name',
         'FilePath' : 'file_path',
@@ -119,6 +116,9 @@ class integration(object):
                         event = json.loads(str(line, 'utf-8'))
                         if category != None:
                             event['category'] = category
+                            event['message'] = category + ' event'
+                        else:
+                            event['message'] = event['ComputerName'] + ' - ' + event['event_simpleName']
                         if 'ContextTimeStamp' in event.keys():
                             event['receive_time'] = event['timestamp']
                             event['timestamp'] = event['ContextTimeStamp']

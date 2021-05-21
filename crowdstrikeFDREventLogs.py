@@ -124,7 +124,7 @@ class integration(object):
 
                             event['message'] = event['ComputerName'] + ' - ' + event['event_simpleName']
                         else:
-                            event['message'] = event['event_simpleName']
+                            event['message'] = 'Crowdstrike FDR Data Event'
                         if 'ContextTimeStamp' in event.keys():
                             event['receive_time'] = event['timestamp']
                             event['timestamp'] = event['ContextTimeStamp']

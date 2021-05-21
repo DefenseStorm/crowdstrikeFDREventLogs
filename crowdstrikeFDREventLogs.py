@@ -6,7 +6,10 @@ import os
 import fcntl
 import json
 import requests
-import time import re import boto3 import gzip
+import time
+import re
+import boto3
+import gzip
 import datetime
 
 from six import PY2

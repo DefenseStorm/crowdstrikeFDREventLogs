@@ -120,11 +120,13 @@ class integration(object):
                         if category != None:
                             event['category'] = category
                             event['message'] = category + ' event'
-                        elif 'ComputerName' in event.keys():
+                        elif 'ComputerName' in event.keys() and 'event_simpleName' in event.keys():
 
                             event['message'] = event['ComputerName'] + ' - ' + event['event_simpleName']
-                        else:
+                        elif 'event_simpleName' in event.keys():
                             event['message'] = event['event_simpleName'] + ' - Crowdstrike FDR Data Event'
+                        else:
+                            event['message'] = 'Crowdstrike FDR Data Event'
                         if 'ContextTimeStamp' in event.keys():
                             event['receive_time'] = event['timestamp']
                             event['timestamp'] = event['ContextTimeStamp']

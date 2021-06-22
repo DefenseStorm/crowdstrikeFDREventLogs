@@ -170,6 +170,7 @@ class integration(object):
 
         while sqs_rh != None:
             self.ds.log('INFO', "Processing Notification: %s" %(msg_id))
+            self.ds.log('INFO', "Processing Notification Message: %s" %(sqs_msg))
             notification_time = int(sqs_msg['timestamp']) / 1000
             current_epoch = time.time()
             self.ds.log('INFO', "Notification: %s, Timestamp %s" %(msg_id, datetime.datetime.utcfromtimestamp(int(sqs_msg['timestamp']/1000)).isoformat() + 'Z'))
@@ -188,7 +189,7 @@ class integration(object):
                     self.ds.log('ERROR', "Error handling downloaded files. Exiting.")
                     return
                 if not self.delete_SQS_message(sqs_rh):
-                    self.ds.log('ERROR', "Deleting SQS Notification - %s" %(sqs_rh))
+                    self.ds.log('ERROR', "Deleting old SQS Notification - %s" %(sqs_rh))
                     return
             sqs_rh, msg_id, sqs_msg = self.get_SQS_message()
         

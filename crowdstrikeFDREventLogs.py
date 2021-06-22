@@ -61,6 +61,7 @@ class integration(object):
         for filename in file_list:
             if '_SUCCESS' in filename:
                 continue
+            self.ds.log('INFO', "Downloading file: %s" %(str(filename)))
             my_bucket.download_file(filename, 'datadir/' + filename.replace('/','_'))
             downloaded_files.append(filename.replace('/','_'))
         return downloaded_files

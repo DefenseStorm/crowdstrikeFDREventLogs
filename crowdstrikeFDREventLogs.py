@@ -136,17 +136,20 @@ class integration(object):
                             event['ScriptContentBytes'] = "Bytes Removed"
                         self.ds.writeJSONEvent(event, JSON_field_mappings = self.JSON_field_mappings)
             except Exception as e:
-                self.ds.log('ERROR', "Error handling file %s: %s" %(f_name, e))
+                self.ds.log('ERROR', "Exception: Error handling file %s: %s" %(f_name, e))
                 return False
             os.remove(f_name)
         return True
 
     def delete_SQS_message(self, sqs_rh):
         self.ds.log('INFO', "Deleting SQS Notification: %s" %(sqs_rh))
+        if self.testing:
+            self.ds.log('INFO', "Skipping deleting of SQS Notification.")
+            return True
         try:
             self.sqs.delete_message(QueueUrl = self.sqs_url, ReceiptHandle = sqs_rh)
         except Exception as e:
-            self.ds.log('ERROR', "Failed to delete SQS Notification: %s - %s" %(sqs_rh, e))
+            self.ds.log('ERROR', "Exception: Failed to delete SQS Notification: %s - %s" %(sqs_rh, e))
             return False
         return True
 

@@ -43,7 +43,7 @@ class integration(object):
         if not os.path.isdir('datadir'):
             os.mkdir('datadir')
         if len(os.listdir('datadir')) > 1:
-            self.ds.log('ERROR', "datadir/ is not empty.  A previous run might have failed.  Exiting")
+            self.ds.log('WARNING', "datadir/ is not empty.  A previous run might have failed.  Continuing")
             return None
 
         my_bucket = self.s3.Bucket(sqs_msg['bucket'])
@@ -142,6 +142,7 @@ class integration(object):
         return True
 
     def delete_SQS_message(self, sqs_rh):
+        return True
         self.ds.log('INFO', "Deleting SQS Notification: %s" %(sqs_rh))
         if self.testing:
             self.ds.log('INFO', "Skipping deleting of SQS Notification.")

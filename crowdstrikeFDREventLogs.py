@@ -42,9 +42,17 @@ class integration(object):
     def get_S3_files(self, sqs_msg):
         if not os.path.isdir('datadir'):
             os.mkdir('datadir')
-        if len(os.listdir('datadir')) > 1:
-            self.ds.log('WARNING', "datadir/ is not empty.  A previous run might have failed.  Continuing")
-            return None
+        if len(os.listdir('datadir')) >= 1:
+            self.ds.log('WARNING', "datadir/ is not empty.  A previous run might have failed.  Cleaning Up")
+            file_list = os.listdir('datadir')
+            for thisfile in file_list:
+                self.ds.log('WARNING', "Removing datadir/" + thisfile)
+                try:
+                    os.remove('datadir/' + thisfile)
+                except Exception as e:
+                    self.ds.log('ERROR', "Exception {0}".format(str(e)))
+                    self.ds.log('ERROR', "Cleanup datadir/ error for file " + thisfile)
+                    pass
 
         my_bucket = self.s3.Bucket(sqs_msg['bucket'])
         obj_list = my_bucket.objects.filter(Prefix = sqs_msg['pathPrefix'])

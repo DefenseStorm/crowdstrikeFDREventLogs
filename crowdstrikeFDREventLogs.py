@@ -37,6 +37,11 @@ class integration(object):
         'event_simpleName' : 'category',
         'FileName' : 'file_name',
         'FilePath' : 'file_path',
+        'CommandLine' : 'command_line',
+        'ImageFileName' : 'image',
+        'Name' : 'event_name',
+        'CID' : 'log_id',
+        'TargetFileName' : 'target_filename',
     }
 
     def get_S3_files(self, sqs_msg):

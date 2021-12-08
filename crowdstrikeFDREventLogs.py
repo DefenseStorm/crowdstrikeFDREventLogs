@@ -155,7 +155,7 @@ class integration(object):
         return True
 
     def delete_SQS_message(self, sqs_rh):
-        return True
+        #return True
         self.ds.log('INFO', "Deleting SQS Notification: %s" %(sqs_rh))
         if self.testing:
             self.ds.log('INFO', "Skipping deleting of SQS Notification.")

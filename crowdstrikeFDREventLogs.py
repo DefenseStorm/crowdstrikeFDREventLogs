@@ -145,6 +145,10 @@ class integration(object):
                             event['receive_time'] = event['timestamp']
                             event['timestamp'] = event['ContextTimeStamp']
                             del event['ContextTimeStamp']
+                        if 'timestamp' in event.keys():
+                            if event['timestamp'] == '':
+                                event['cs_timestamp'] = event['timestamp']
+                                del event['timestamp']
                         if 'ScriptContentBytes' in event.keys():
                             event['ScriptContentBytes'] = "Bytes Removed"
                         self.ds.writeJSONEvent(event, JSON_field_mappings = self.JSON_field_mappings)

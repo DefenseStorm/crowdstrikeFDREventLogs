@@ -143,9 +143,10 @@ class integration(object):
                             event['message'] = 'Crowdstrike FDR Data Event'
                         if 'ContextTimeStamp' in event.keys():
                             if event['ContextTimeStamp'] != '':
+                                self.ds.log("INFO", 'ContextTimeStamp: "%s"' %str(event['ContextTimeStamp']))
                                 event['receive_time'] = event['timestamp']
                                 event['timestamp'] = event['ContextTimeStamp']
-                                del event['ContextTimeStamp']
+                                #del event['ContextTimeStamp']
                         if 'timestamp' in event.keys():
                             if event['timestamp'] == '':
                                 event['cs_timestamp'] = event['timestamp']

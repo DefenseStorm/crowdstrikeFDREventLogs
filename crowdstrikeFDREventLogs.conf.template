@@ -10,4 +10,5 @@ s3_key =
 s3_secret = 
 sqs_url =
 s3_identifier =
+region_name = 
 history = 24

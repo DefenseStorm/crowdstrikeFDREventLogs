@@ -180,9 +180,10 @@ class integration(object):
         self.sqs_url = self.ds.config_get('crowdstrike', 'sqs_url')
         self.s3_idenfifier = self.ds.config_get('crowdstrike', 's3_identifier')
         self.history = self.ds.config_get('crowdstrike', 'history')
+        self.region_name = self.ds.config_get('crowdstrike', 'region_name')
 
         try:
-            self.sqs = boto3.client('sqs', region_name='us-west-1', aws_access_key_id=self.s3_key, aws_secret_access_key=self.s3_secret)
+            self.sqs = boto3.client('sqs', region_name=self.region_name, aws_access_key_id=self.s3_key, aws_secret_access_key=self.s3_secret)
             self.s3 = boto3.resource('s3', aws_access_key_id=self.s3_key, aws_secret_access_key=self.s3_secret)
         except Exception as e:
             traceback.print_exc()
